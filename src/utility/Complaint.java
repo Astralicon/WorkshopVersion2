@@ -37,8 +37,16 @@ public class Complaint {
 		return complainee;
 	}
 
+	public User getComplainer() {
+		return complainer;
+	}
+
 	public String getComplaintMessage() {
 		return complaintMessage;
+	}
+
+	public String getDate() {
+		return this.date.getTime() + "";
 	}
 
 	/**

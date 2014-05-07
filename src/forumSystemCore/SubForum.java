@@ -26,7 +26,8 @@ public class SubForum {
 		this.id = String.valueOf(NEXT_ID);
 		NEXT_ID++;
 	}
-	public String getId(){return this.id;}
+	public String getId() {return this.id;}
+	public String getSubject() {return subject;}
 	
 	/**
 	 * upgrade user to moderator

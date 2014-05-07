@@ -95,4 +95,8 @@ public class Rank {
 			return true;
 		return false;
 	}
+	
+	public String getName() {
+		return name;
+	}
 }

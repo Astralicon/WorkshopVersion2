@@ -126,4 +126,8 @@ public class User {
 		return password;
 	}
 	
+	public Rank getRank() {
+		return rank;
+	}
+	
 }
