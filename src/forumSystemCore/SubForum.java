@@ -44,7 +44,9 @@ public class SubForum {
 	 * @return
 	 */
 	public boolean removeModerator(User user){
-		return moderators.remove(user);
+		if (moderators.size()>1)
+			return moderators.remove(user);
+		else return false;
 	}
 	/**
 	 * chack if the user is a moderator
