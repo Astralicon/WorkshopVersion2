@@ -1,4 +1,5 @@
 package utility;
+/** THis is the policy **/
 public class Policy {
 	private String info;
 	
