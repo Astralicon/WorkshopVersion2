@@ -1,4 +1,5 @@
 package forumSystemCore;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -24,6 +25,7 @@ public class Forum {
 		this.subForums = new ArrayList<SubForum>();
 		this.ranks = new ArrayList<Rank>();
 		administrators.add(admin);
+		save();
 	}
 	//Getters:
 	public String getName(){
@@ -46,6 +48,7 @@ public class Forum {
 		
 		SubForum newSF = new SubForum(subForumName, moderator);
 		subForums.add(newSF);
+		save();
 		return newSF.getId();
 	}
 	
@@ -56,6 +59,7 @@ public class Forum {
 			if (subForums.get(i).getId().equals(subForumId)) {
 				found = true;
 				subForums.remove(i);
+				save();
 			}
 		}
 		return found; 
@@ -64,6 +68,7 @@ public class Forum {
 	public boolean addAdmin(User invoker, User adminToAdd) {
 		if (!invoker.hasPermission(Permissions.ADD_ADMIN)) return false;
 		administrators.add(adminToAdd);
+		save();
 		return true;
 	}
 	
@@ -74,6 +79,7 @@ public class Forum {
 			if (administrators.get(i) == adminToRemove) {
 				found = true;
 				administrators.remove(i);
+				save();
 			}
 		}
 		return true;		
@@ -82,12 +88,14 @@ public class Forum {
 	public boolean addModerator(String subForumId, User invoker, User moderator) {
 		if (!invoker.hasPermission(Permissions.ADD_MODERATOR)) return false;
 		getSubForumById(subForumId).addModerator(moderator);
+		save();
 		return true; 
 	}
 	
 	public boolean removeModerator(String subForumId, User invoker, User moderator) {
 		if (!invoker.hasPermission(Permissions.REMOVE_MODERATOR)) return false;
 		getSubForumById(subForumId).removeModerator(moderator);
+		save();
 		return true; 
 	}
 	
@@ -100,6 +108,7 @@ public class Forum {
 		if (!TextVerifier.verifyEmail(mail) || !TextVerifier.verifyName(username, policy) || !TextVerifier.verifyPassword(password, policy) || name.equals("")) return null;
 		User member = new User(mail, name, username, password, Rank.member);
 		this.members.add(member);
+		save();
 		return member;
 	}
 	
@@ -130,4 +139,15 @@ public class Forum {
 		}
 		return false;
 	}
+	
+	public void save() {
+		try {
+			sql.Query.save(this);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 }

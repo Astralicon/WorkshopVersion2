@@ -1,6 +1,8 @@
 package utility;
 
 import forumSystemCore.*;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Rank {
@@ -77,10 +79,12 @@ public class Rank {
 	 */
 	public void setPermissions(ArrayList<Permissions> Permissions) {
 		this.permissions = Permissions;
+		save();
 	}
 
 	public void addPermission(Permissions permissions) {
 		this.permissions.add(permissions);
+		save();
 	}
 
 	/**
@@ -98,5 +102,15 @@ public class Rank {
 	
 	public String getName() {
 		return name;
+	}
+	
+	public void save() {
+		try {
+			sql.Query.save(this);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -1,7 +1,9 @@
 package forumSystemCore;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import utility.*;
 import user.*;
 
@@ -25,6 +27,7 @@ public class SubForum {
 		
 		this.id = String.valueOf(NEXT_ID);
 		NEXT_ID++;
+		save();
 	}
 	public String getId() {return this.id;}
 	public String getSubject() {return subject;}
@@ -35,8 +38,9 @@ public class SubForum {
 	 * @return
 	 */
 	public boolean addModerator(User mod){
-		if(isModerator(mod))return false;
+		if(isModerator(mod)) return false;
 		this.moderators.add(mod);
+		save();
 		return true;
 	}
 	/**
@@ -45,9 +49,10 @@ public class SubForum {
 	 * @return
 	 */
 	public boolean removeModerator(User user){
-		if (moderators.size()>1)
-			return moderators.remove(user);
-		else return false;
+		if (moderators.size() <= 1) return false;
+		moderators.remove(user);
+		save();
+		return true;
 	}
 	/**
 	 * chack if the user is a moderator
@@ -73,11 +78,12 @@ public class SubForum {
 		if (!(title.equals("")) || !(content.equals(""))){
 		 Message m = new Message(user, title, content);
 		 this.messages.add(m);
+		 save();
 		 return m.getId();
 		}
-		
 		return null;
 	}
+	
 	/**
 	 * adding a new complaint in this subforum
 	 * @param complainer
@@ -88,9 +94,10 @@ public class SubForum {
 	public Complaint complain(User complainer, User complainee, String complaint){
 		Complaint com = new Complaint(complainer, complainee, complaint, new Date());
 		this.complaints.add(com);
+		save();
 		return com;
-		
 	}
+	
 	/**
 	 * suspend a user from a rank
 	 * @param toSuspend
@@ -101,8 +108,10 @@ public class SubForum {
 		if(isSuspended(toSuspend)) return false; 
 		Suspended sus = new Suspended(toSuspend, until);
 		this.suspendedUsers.add(sus);
+		save();
 		return true;
 	}
+	
 	/**
 	 * check to see if a certain user is suspended
 	 * @param user
@@ -113,6 +122,16 @@ public class SubForum {
 			if(suspendedUsers.get(i).getUser() == user) return true;
 		}
 		return false;
+	}
+	
+	public void save() {
+		try {
+			sql.Query.save(this);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }
 

@@ -1,5 +1,7 @@
 package user;
+import java.sql.SQLException;
 import java.util.ArrayList;
+
 import utility.*;
 
 public class User {
@@ -37,8 +39,9 @@ public class User {
 	 * @param rank
 	 */
 	public User(String mail, String name, String username, String password, Rank rank) {
-		changeDetails(mail, name, username, password);
 		this.rank = rank;
+		changeDetails(mail, name, username, password);
+		save();
 	}
 	
 	/**
@@ -53,6 +56,7 @@ public class User {
 		this.name = name;
 		this.username = username;
 		this.password = password;
+		save();
 	}
 	
 	/**
@@ -62,6 +66,7 @@ public class User {
 	public void sendFriendRequest(User user) {
 		pendingFriendRequests.add(user);
 		user.receiveFriendRequest(this);
+		save();
 	}
 	
 	/**
@@ -70,6 +75,7 @@ public class User {
 	 */
 	public void receiveFriendRequest(User user) {
 		friendRequests.add(user);
+		save();
 	}
 	
 	/**
@@ -80,6 +86,7 @@ public class User {
 		friendRequests.remove(user);
 		friends.add(user);
 		user.friendshipApproved(this);
+		save();
 	}
 	
 	/**
@@ -89,6 +96,7 @@ public class User {
 	public void friendshipApproved(User user) {
 		pendingFriendRequests.remove(user);
 		friends.add(user);
+		save();
 	}
 	
 	/**
@@ -128,6 +136,16 @@ public class User {
 	
 	public Rank getRank() {
 		return rank;
+	}
+	
+	public void save() {
+		try {
+			sql.Query.save(this);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 }

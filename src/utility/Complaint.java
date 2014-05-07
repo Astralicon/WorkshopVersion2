@@ -1,5 +1,7 @@
 package utility;
+import java.sql.SQLException;
 import java.util.Date;
+
 import user.*;
 
 public class Complaint {
@@ -9,24 +11,15 @@ public class Complaint {
 	private User complainee;
 	private String complaintMessage;
 	private Date date;
-	private String status; //in process/closed/opened
 	
-	public Complaint(User complainer,User complainee,String msg, Date date){
-		this.status = "Opened";
+	public Complaint(User complainer,User complainee,String msg, Date date) {
 		this.id = next_cpmlnt_id;
 		next_cpmlnt_id++;
 		this.complainer=complainer;
 		this.complainee=complainee;
 		this.complaintMessage=msg;
 		this.date=date;
-	}
-	
-	public void setStatus(String status) {
-		this.status = status;
-	}
-	
-	public String getStatus() {
-		return this.status;
+		save();
 	}
 
 	public int getId() {
@@ -60,13 +53,20 @@ public class Complaint {
 		if(u==this.complainer && msg!=null){
 			this.complainee=u2;
 			this.complaintMessage = msg;
+			save();
 			return true;
 		}
 		return false;
 	}
-
-
 	
-
+	public void save() {
+		try {
+			sql.Query.save(this);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 }
