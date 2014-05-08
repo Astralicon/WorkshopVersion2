@@ -1,15 +1,18 @@
-package unitTest;
+package acceptanceTests;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import forumsys.Forum;
-import forumsys.ForumSystem;
-import forumsys.Message;
-import forumsys.Rank;
-import forumsys.User;
+import utility.Complaint;
+import forumSystemCore.Forum;
+import forumSystemCore.ForumSystem;
+import forumSystemCore.Message;
+import utility.Rank;
+import forumSystemCore.SubForum;
+import user.User;
 
 public class testMessage {
 	public static ForumSystem sys;
@@ -52,9 +55,8 @@ public class testMessage {
 	@Test
 	//need to add user in edit message method signature
 	public void testEditMsg(){
-		assertTrue(m.editMessage(admin, "dd", "gg!!!"));
-		assertFalse(m.editMessage(u, "dd", "gg!!!"));
-		assertFalse(m.editMessage(admin, "", ""));
-		assertFalse(m.editMessage(admin, null, null));
+		assertTrue(m.editMessage("dd", "gg!!!"));
+		assertFalse(m.editMessage("", ""));
+		assertFalse(m.editMessage(null, null));
 	}
 }
