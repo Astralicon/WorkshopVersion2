@@ -1,5 +1,6 @@
 package sql;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -8,6 +9,13 @@ import utility.*;
 import user.*;
 
 public class Query {
+	
+	public static void initDB() throws ClassNotFoundException, SQLException, IOException {
+		Executor.run("CREATE DATABASE Forum");
+		String initDbCode = utility.IO.read("init.sql");
+		String[] commands = initDbCode.split("--NEXT--");
+		for (int i=0; i<commands.length; i++) Executor.run(commands[i]);
+	}
 
 	public static void save(Rank rank) throws ClassNotFoundException, SQLException {
 		Executor.run("DELETE FROM `Ranks` WHERE `name` = '" + rank.getName() + "'");

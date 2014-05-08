@@ -1,6 +1,9 @@
 package forumSystemCore;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
+
 import utility.LogFile;
 import user.User;
 import utility.*;
@@ -15,6 +18,15 @@ public class ForumSystem {
 	// Constructors:
 	public User startSystem(String email, String name, String username,
 			String password) {
+		try {
+			sql.Query.initDB();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		if (!TextVerifier.verifyName(username, new Policy())
 				|| !TextVerifier.verifyEmail(email)
 				|| !TextVerifier.verifyPassword(password, new Policy())

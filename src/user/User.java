@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import utility.*;
 import server.reactor.*;
 public class User {
+	
+	public User Guest = new User();
+	
 	//user connectionHandler
 	private ConnectionHandler handler;
 	
@@ -45,6 +48,11 @@ public class User {
 		changeDetails(mail, name, username, password);
 		save();
 	}
+	
+	/**
+	 * Constructor for guest
+	 */
+	public User() {}
 	
 	/**
 	 * Changes user details
