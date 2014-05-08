@@ -196,6 +196,18 @@ public class Query {
 			User admin = forum.getAdministrators().get(i);
 			Executor.run("INSERT INTO `_administrators`(`ForumId`, `Username`) VALUES ('" + forum.getId() + "', '" + admin.getUsername() + "')");
 		}
+		// messages
+		Executor.run("DELETE FROM `Users` WHERE `rel` = '" + forum.getId() + "'");
+		for (int i=0; i<forum.getMembers().size(); i++) forum.getMembers().get(i).save();
+		Executor.run("UPDATE `Users` SET `rel` = '" + forum.getId() + "' WHERE `rel` = '0'");
+		// sub forums
+		Executor.run("DELETE FROM `SubForums` WHERE `rel` = '" + forum.getId() + "'");
+		for (int i=0; i<forum.getSubForums().size(); i++) forum.getSubForums().get(i).save();
+		Executor.run("UPDATE `SubForums` SET `rel` = '" + forum.getId() + "' WHERE `rel` = '0'");
+		// ranks
+		Executor.run("DELETE FROM `Ranks` WHERE `rel` = '" + forum.getId() + "'");
+		for (int i=0; i<forum.getRanks().size(); i++) forum.getRanks().get(i).save();
+		Executor.run("UPDATE `Ranks` SET `rel` = '" + forum.getId() + "' WHERE `rel` = '0'");
 	}
 	
 }
