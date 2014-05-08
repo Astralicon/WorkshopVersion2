@@ -1,4 +1,7 @@
-/sql
-/utility
-/user
+/acceptanceTests
 /forumSystemCore
+/reactorServer
+/sql
+/user
+/utility
+/server

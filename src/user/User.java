@@ -3,8 +3,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import utility.*;
-
+import server.reactor.*;
 public class User {
+	//user connectionHandler
+	private ConnectionHandler handler;
 	
 	// user mail
 	private String mail;
@@ -146,6 +148,16 @@ public class User {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	//Connectionhandler methods
+	public void addHandler(ConnectionHandler newConnection) {
+		this.handler=newConnection;
+	}
+	
+	public void sayToMe(String say) {
+		 this.handler.sayToMe(say);
+		
 	}
 	
 }
