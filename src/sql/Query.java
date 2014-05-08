@@ -190,6 +190,12 @@ public class Query {
 				"'" + forum.getId() + "', " + 
 				"'" + forum.getName() + "'" + 
 			")");
+		// administrators
+		Executor.run("DELETE FROM `_administrators` WHERE `ForumId` = '" + forum.getId() + "'");
+		for (int i=0; i<forum.getAdministrators().size(); i++) {
+			User admin = forum.getAdministrators().get(i);
+			Executor.run("INSERT INTO `_administrators`(`ForumId`, `Username`) VALUES ('" + forum.getId() + "', '" + admin.getUsername() + "')");
+		}
 	}
 	
 }

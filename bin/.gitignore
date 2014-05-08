@@ -1,5 +1,12 @@
+/acceptanceTests
+/forumSystemCore
+/reactorServer
 /sql
-/utility
 /user
+<<<<<<< HEAD
 /forumSystemCore
 /acceptanceTests
+=======
+/utility
+/server
+>>>>>>> 068a82f127bc622e52be9a73c181a68e0f5b5abe

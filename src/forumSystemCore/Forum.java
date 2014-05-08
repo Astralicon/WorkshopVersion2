@@ -122,7 +122,7 @@ public class Forum {
 		return administrators.contains(user);
 	}
 	
-	protected SubForum getSubForumById(String id) {
+	public SubForum getSubForumById(String id) {
 		for (int i=0; i<subForums.size(); i++) if (id.equals(subForums.get(i).getId())) return subForums.get(i);
 		return null;
 	}
