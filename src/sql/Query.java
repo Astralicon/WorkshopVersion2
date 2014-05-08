@@ -12,6 +12,7 @@ public class Query {
 	public static void save(Rank rank) throws ClassNotFoundException, SQLException {
 		Executor.run("DELETE FROM `Ranks` WHERE `name` = '" + rank.getName() + "'");
 		Executor.run("INSERT INTO `Ranks`(" + 
+				"`rel`, " + 
 				"`name`, " + 
 				"`CREATE_FORUM`, " + 
 				"`SET_FORUM_PROPERTIES`, " + 
@@ -26,6 +27,7 @@ public class Query {
 				"`ADD_MODERATOR`, " + 
 				"`REMOVE_MODERATOR`" + 
 			") VALUES (" + 
+				"'0', " + 
 				"'" + rank.getName() + "', " + 
 				"'" + (rank.hasPermission(Permissions.CREATE_FORUM)) + "', " + 
 				"'" + (rank.hasPermission(Permissions.SET_FORUM_PROPERTIES)) + "', " + 
@@ -44,13 +46,15 @@ public class Query {
 
 	public static void save(Complaint comp) throws ClassNotFoundException, SQLException {
 		Executor.run("DELETE FROM `Complaints` WHERE `id` = '" + comp.getId() + "'");
-		Executor.run("INSERT INTO `Ranks`(" + 
+		Executor.run("INSERT INTO `Complaints`(" + 
+				"`rel`, " + 
 				"`id`, " + 
 				"`complainer`, " + 
 				"`complainee`, " + 
 				"`complaintMessage`, " + 
 				"`date`" + 
 			") VALUES (" + 
+				"'0', " + 
 				"'" + comp.getId() + "', " + 
 				"'" + comp.getComplainer() + "', " + 
 				"'" + comp.getComplainee() + "', " + 
@@ -61,13 +65,15 @@ public class Query {
 
 	public static void save(User user) throws ClassNotFoundException, SQLException {
 		Executor.run("DELETE FROM `Users` WHERE `username` = '" + user.getUsername() + "'");
-		Executor.run("INSERT INTO `Ranks`(" + 
+		Executor.run("INSERT INTO `Users`(" + 
+				"`rel`, " + 
 				"`mail`, " + 
 				"`name`, " + 
 				"`username`, " + 
 				"`password`, " + 
 				"`rank`" + 
 			") VALUES (" + 
+				"'0', " + 
 				"'" + user.getMail() + "', " + 
 				"'" + user.getName() + "', " + 
 				"'" + user.getUsername() + "', " + 
@@ -76,12 +82,35 @@ public class Query {
 			")");
 	}
 
+	public static void save(Message msg) throws ClassNotFoundException, SQLException {
+		Executor.run("DELETE FROM `Messages` WHERE `id` = '" + msg.getId() + "'");
+		Executor.run("INSERT INTO `SubForums`(" + 
+				"`msgRel`, " + 
+				"`threadRel`, " + 
+				"`id`, " + 
+				"`date`, " + 
+				"`content`, " + 
+				"`title`, " + 
+				"`writer`" +
+			") VALUES (" + 
+				"'0', " + 
+				"'0', " + 
+				"'" + msg.getId() + "', " + 
+				"'" + msg.getDate() + "', " + 
+				"'" + msg.getContent() + "', " + 
+				"'" + msg.getTitle() + "', " + 
+				"'" + msg.getUser() + "'" + 
+			")");
+	}
+
 	public static void save(SubForum sf) throws ClassNotFoundException, SQLException {
 		Executor.run("DELETE FROM `SubForums` WHERE `id` = '" + sf.getId() + "'");
-		Executor.run("INSERT INTO `Ranks`(" + 
+		Executor.run("INSERT INTO `SubForums`(" + 
+				"`rel`, " + 
 				"`id`, " + 
 				"`subject`" +
 			") VALUES (" + 
+				"'0', " + 
 				"'" + sf.getId() + "', " + 
 				"'" + sf.getSubject() + "'" + 
 			")");
@@ -89,7 +118,7 @@ public class Query {
 
 	public static void save(Forum forum) throws ClassNotFoundException, SQLException {
 		Executor.run("DELETE FROM `Forums` WHERE `id` = '" + forum.getId() + "'");
-		Executor.run("INSERT INTO `Ranks`(" + 
+		Executor.run("INSERT INTO `Forums`(" + 
 				"`id`, " + 
 				"`name`" +
 			") VALUES (" + 

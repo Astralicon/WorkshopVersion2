@@ -1,7 +1,9 @@
 package forumSystemCore;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import user.*;
 import utility.*;
 
@@ -24,8 +26,24 @@ public class Message {
 		
 		this.id = String.valueOf(NEXT_ID);
 		NEXT_ID++;
+		save();
 	}
 	public String getId(){return this.id;}
+	public String getDate() {
+		return date.getTime() + "";
+	}
+	public String getContent() {
+		return content;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public User getUser() {
+		return writer;
+	}
+	public List<Message> getReplies() {
+		return this.replies;
+	}
 
 	
 	/**
@@ -38,6 +56,7 @@ public class Message {
 	public Message addReply(User user, String title, String content){
 		Message m = new Message(user, title, content);
 		replies.add(m);
+		save();
 		return m;
 	}
 	/**
@@ -49,6 +68,7 @@ public class Message {
 	public boolean removeReply(User user, Message message){
 		if(user.hasPermission(Permissions.DELETE_MESSAGE) || message.isWriter(user)){
 			replies.remove(message);
+			save();
 			return true;
 		}
 		return false;
@@ -71,7 +91,18 @@ public class Message {
 	public boolean editMessage(String title, String content){
 		if(title!=null)this.title =title;
 		if(content!=null)this.content = content;
+		save();
 		return true;
+	}
+	
+	public void save() {
+		try {
+			sql.Query.save(this);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 
