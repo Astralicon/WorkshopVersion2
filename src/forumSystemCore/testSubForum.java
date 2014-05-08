@@ -1,4 +1,4 @@
-package acceptanceTests;
+package forumSystemCore;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -10,7 +10,6 @@ import java.util.Date;
 import org.junit.Before;
 import org.junit.Test;
 
-import forumSystemCore.*;
 import utility.*;
 import user.User;
 
