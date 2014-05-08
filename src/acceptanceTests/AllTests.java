@@ -9,7 +9,9 @@ import org.junit.runners.Suite.SuiteClasses;
 	initSystemTests.class, 
 	RegLoginLogoutTest.class,
 	SubForumTest.class, 
-	writeMessageTest.class 
+	writeMessageTest.class,
+	DataBaseTest.class,
+	
 })
 public class AllTests {
 
