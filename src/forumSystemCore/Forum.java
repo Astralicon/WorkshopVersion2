@@ -127,7 +127,7 @@ public class Forum {
 		return null;
 	}
 	
-	private static int nextId = 0;
+	private static int nextId = 1;
 	private void setId() {
 		this.id = nextId++ + "";
 	}

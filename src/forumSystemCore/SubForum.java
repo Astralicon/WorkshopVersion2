@@ -15,7 +15,7 @@ public class SubForum {
 	private List<Message> messages;
 	private List<Suspended> suspendedUsers;
 	private String id;
-	private static int NEXT_ID;
+	private static int NEXT_ID = 1;
 	
 	
 	public SubForum(String subject, User admin){
@@ -151,6 +151,12 @@ public class SubForum {
 		}
 		return false;
 	}
+	
+	public Message getMessageById(String id) {
+		for (int i=0; i<messages.size(); i++) if (id.equals(messages.get(i).getId())) return messages.get(i);
+		return null;
+	}
+	
 }
 
 	

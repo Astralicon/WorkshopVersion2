@@ -5,7 +5,7 @@ import java.util.Date;
 import user.*;
 
 public class Complaint {
-	private static int next_cpmlnt_id=0;
+	private static int next_cpmlnt_id=1;
 	private int id; 
 	private User complainer;
 	private User complainee;

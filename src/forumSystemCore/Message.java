@@ -8,7 +8,7 @@ import user.*;
 import utility.*;
 
 public class Message {
-	private static int NEXT_ID=0;
+	private static int NEXT_ID=1;
 	private Date date;
 	private String content;
 	private String title;
