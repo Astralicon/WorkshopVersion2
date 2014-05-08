@@ -65,8 +65,8 @@ public class testSubForum {
 	@Test
 	public void testAddComplaint() {
 		Complaint c = new Complaint(admin,admin,"",null);
-		assertFalse(sf.existComplaint(c));
-		assertTrue(sf.existComplaint(sf.complain(admin, admin, "asshole")));		
+		assertFalse(sf.existComplaint(c.getId()));
+		assertTrue(sf.existComplaint(sf.complain(admin, admin, "asshole").getId()));		
 	}
 	
 	@Test
