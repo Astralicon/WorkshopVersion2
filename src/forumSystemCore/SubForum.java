@@ -133,6 +133,20 @@ public class SubForum {
 			e.printStackTrace();
 		}
 	}
+	
+	public boolean existMessage(String id) {
+		for (int i=0; i < messages.size(); i++) {
+			if (messages.get(i).getId() == id) return true;
+		}
+		return false;
+	}
+	
+	public boolean existComplaint(int id) {
+		for (int i=0; i < complaints.size(); i++) {
+			if (complaints.get(i).getId() == id) return true;
+		}
+		return false;
+	}
 }
 
 	
