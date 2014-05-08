@@ -31,6 +31,10 @@ public class SubForum {
 	}
 	public String getId() {return this.id;}
 	public String getSubject() {return subject;}
+	public List<User> getModerators() {return moderators;}
+	public List<Complaint> getComplaints() {return complaints;}
+	public List<Message> getMessages() {return messages;}
+	public List<Suspended> getSuspendedUsers() {return suspendedUsers;}
 	
 	/**
 	 * upgrade user to moderator

@@ -12,4 +12,7 @@ public class Suspended {
 	public User getUser() {
 		return user;
 	}
+	public String getDate() {
+		return date.getTime() + "";
+	}
 }

@@ -138,6 +138,10 @@ public class User {
 		return rank;
 	}
 	
+	public ArrayList<User> getFriends() { return friends; }
+	public ArrayList<User> getPendingFriendRequests() { return pendingFriendRequests; }
+	public ArrayList<User> getFriendRequests() { return friendRequests; }
+	
 	public void save() {
 		try {
 			sql.Query.save(this);

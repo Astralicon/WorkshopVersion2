@@ -35,6 +35,11 @@ public class Forum {
 	public String getId(){
 		return id;
 	}
+	public ArrayList<User> getAdministrators() {return administrators;}
+	public ArrayList<User> getMembers() {return members;}
+	public ArrayList<SubForum> getSubForums() {return subForums;}
+	public ArrayList<Rank> getRanks() {return ranks;}
+	
 	//Methods:
 	public User login(String username, String password) {
 		for (int i=0; i<members.size(); i++) 

@@ -29,18 +29,18 @@ public class Query {
 			") VALUES (" + 
 				"'0', " + 
 				"'" + rank.getName() + "', " + 
-				"'" + (rank.hasPermission(Permissions.CREATE_FORUM)) + "', " + 
-				"'" + (rank.hasPermission(Permissions.SET_FORUM_PROPERTIES)) + "', " + 
-				"'" + (rank.hasPermission(Permissions.CREATE_SUB_FORUM)) + "', " + 
-				"'" + (rank.hasPermission(Permissions.CREATE_MESSAGE)) + "', " + 
-				"'" + (rank.hasPermission(Permissions.SET_RANKS)) + "', " + 
-				"'" + (rank.hasPermission(Permissions.SET_USER_RANK)) + "', " + 
-				"'" + (rank.hasPermission(Permissions.DELETE_MESSAGE)) + "', " + 
-				"'" + (rank.hasPermission(Permissions.DELETE_SUB_FORUM)) + "', " + 
-				"'" + (rank.hasPermission(Permissions.ADD_ADMIN)) + "', " + 
-				"'" + (rank.hasPermission(Permissions.REMOVE_ADMIN)) + "', " + 
-				"'" + (rank.hasPermission(Permissions.ADD_MODERATOR)) + "', " + 
-				"'" + (rank.hasPermission(Permissions.REMOVE_MODERATOR)) + "'" + 
+				"'" + (rank.hasPermission(Permissions.CREATE_FORUM) ? "1" : "0") + "', " + 
+				"'" + (rank.hasPermission(Permissions.SET_FORUM_PROPERTIES) ? "1" : "0") + "', " + 
+				"'" + (rank.hasPermission(Permissions.CREATE_SUB_FORUM) ? "1" : "0") + "', " + 
+				"'" + (rank.hasPermission(Permissions.CREATE_MESSAGE) ? "1" : "0") + "', " + 
+				"'" + (rank.hasPermission(Permissions.SET_RANKS) ? "1" : "0") + "', " + 
+				"'" + (rank.hasPermission(Permissions.SET_USER_RANK) ? "1" : "0") + "', " + 
+				"'" + (rank.hasPermission(Permissions.DELETE_MESSAGE) ? "1" : "0") + "', " + 
+				"'" + (rank.hasPermission(Permissions.DELETE_SUB_FORUM) ? "1" : "0") + "', " + 
+				"'" + (rank.hasPermission(Permissions.ADD_ADMIN) ? "1" : "0") + "', " + 
+				"'" + (rank.hasPermission(Permissions.REMOVE_ADMIN) ? "1" : "0") + "', " + 
+				"'" + (rank.hasPermission(Permissions.ADD_MODERATOR) ? "1" : "0") + "', " + 
+				"'" + (rank.hasPermission(Permissions.REMOVE_MODERATOR) ? "1" : "0") + "'" + 
 			")");
 	}
 
@@ -80,13 +80,52 @@ public class Query {
 				"'" + user.getPassword() + "', " + 
 				"'" + user.getRank().getName() + "'" + 
 			")");
+		Executor.run("DELETE FROM `_friends` WHERE `user1` = '" + user.getUsername() + "'");
+		for (int i=0; i<user.getFriends().size(); i++) {
+			User user2 = user.getFriends().get(i);
+			Executor.run("INSERT INTO `_friends`(" + 
+					"`rel`, " + 
+					"`user1`, " + 
+					"`user2`" + 
+				") VALUES (" + 
+					"'0', " + 
+					"'" + user.getUsername() + "', " + 
+					"'" + user2.getUsername() + "'" + 
+				")");
+		}
+		Executor.run("DELETE FROM `_friendRequests` WHERE `user1` = '" + user.getUsername() + "'");
+		for (int i=0; i<user.getFriendRequests().size(); i++) {
+			User user2 = user.getFriendRequests().get(i);
+			Executor.run("INSERT INTO `_friendRequests`(" + 
+					"`rel`, " + 
+					"`user1`, " + 
+					"`user2`" + 
+				") VALUES (" + 
+					"'0', " + 
+					"'" + user.getUsername() + "', " + 
+					"'" + user2.getUsername() + "'" + 
+				")");
+		}
+		Executor.run("DELETE FROM `_pendingFriendRequests` WHERE `user1` = '" + user.getUsername() + "'");
+		for (int i=0; i<user.getPendingFriendRequests().size(); i++) {
+			User user2 = user.getPendingFriendRequests().get(i);
+			Executor.run("INSERT INTO `_pendingFriendRequests`(" + 
+					"`rel`, " + 
+					"`user1`, " + 
+					"`user2`" + 
+				") VALUES (" + 
+					"'0', " + 
+					"'" + user.getUsername() + "', " + 
+					"'" + user2.getUsername() + "'" + 
+				")");
+		}
 	}
 
 	public static void save(Message msg) throws ClassNotFoundException, SQLException {
 		Executor.run("DELETE FROM `Messages` WHERE `id` = '" + msg.getId() + "'");
 		Executor.run("INSERT INTO `SubForums`(" + 
 				"`msgRel`, " + 
-				"`threadRel`, " + 
+				"`subforumRel`, " + 
 				"`id`, " + 
 				"`date`, " + 
 				"`content`, " + 
@@ -101,6 +140,12 @@ public class Query {
 				"'" + msg.getTitle() + "', " + 
 				"'" + msg.getUser() + "'" + 
 			")");
+		Executor.run("DELETE FROM `Messages` WHERE `msgRel` = '" + msg.getId() + "'");
+		for (int i=0; i<msg.getReplies().size(); i++) {
+			Message reply = msg.getReplies().get(i);
+			reply.save();
+			Executor.run("UPDATE `Messages` SET `msgRel` = '" + msg.getId() + "' WHERE `msgRel` = '0'");
+		}
 	}
 
 	public static void save(SubForum sf) throws ClassNotFoundException, SQLException {
@@ -114,6 +159,26 @@ public class Query {
 				"'" + sf.getId() + "', " + 
 				"'" + sf.getSubject() + "'" + 
 			")");
+		// moderators
+		Executor.run("DELETE FROM `_moderators` WHERE `subforumId` = '" + sf.getId() + "'");
+		for (int i=0; i<sf.getModerators().size(); i++) {
+			User moderator = sf.getModerators().get(i);
+			Executor.run("INSERT INTO `_moderators`(`subforumId`, `username`) VALUES ('" + sf.getId() + "', '" + moderator.getUsername() + "')");
+		}
+		// complaints
+		Executor.run("DELETE FROM `Complaints` WHERE `rel` = '" + sf.getId() + "'");
+		for (int i=0; i<sf.getComplaints().size(); i++) sf.getComplaints().get(i).save();
+		Executor.run("UPDATE `Complaints` SET `rel` = '" + sf.getId() + "' WHERE `rel` = '0'");
+		// messages
+		Executor.run("DELETE FROM `Messages` WHERE `subforumRel` = '" + sf.getId() + "'");
+		for (int i=0; i<sf.getMessages().size(); i++) sf.getMessages().get(i).save();
+		Executor.run("UPDATE `Messages` SET `subforumRel` = '" + sf.getId() + "' WHERE `subforumRel` = '0' AND `msgRel` = '0'");
+		// suspended
+		Executor.run("DELETE FROM `_suspended` WHERE `subforumId` = '" + sf.getId() + "'");
+		for (int i=0; i<sf.getSuspendedUsers().size(); i++) {
+			Suspended sus = sf.getSuspendedUsers().get(i);
+			Executor.run("INSERT INTO `_suspended`(`subforumId`, `username`, `date`) VALUES ('" + sf.getId() + "', '" + sus.getUser() + "', '" + sus.getDate() + "')");
+		}
 	}
 
 	public static void save(Forum forum) throws ClassNotFoundException, SQLException {
